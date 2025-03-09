@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计时器 App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <h1>专注计时器</h1>
+        <div id="timer">00:00</div>
+        <div class="buttons">
+            <button>5 分钟</button>
+            <button>25 分钟</button>
+            <button>50 分钟</button>
+            <button>正计时</button>
+            <button>重置</button>
+        </div>
+    </div>
+    
+    <script>
+        let timer;
+        let timeLeft = 0;
+        let running = false;
+
+        function startTimer(seconds) {
+            clearInterval(timer);
+            timeLeft = seconds;
+            running = true;
+            updateDisplay();
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    clearInterval(timer);
+                    alert("时间到！");
+                }
+            }, 1000);
+        }
+
+        function startStopwatch() {
+            clearInterval(timer);
+            timeLeft = 0;
+            running = true;
+            updateDisplay();
+            timer = setInterval(() => {
+                timeLeft++;
+                updateDisplay();
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timeLeft = 0;
+            running = false;
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("timer").textContent =
+                (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        }
+
+        // Event listeners
+        document.querySelector('button:nth-child(1)').addEventListener('click', () => startTimer(300));
+        document.querySelector('button:nth-child(2)').addEventListener('click', () => startTimer(1500));
+        document.querySelector('button:nth-child(3)').addEventListener('click', () => startTimer(3000));
+        document.querySelector('button:nth-child(4)').addEventListener('click', startStopwatch);
+        document.querySelector('button:nth-child(5)').addEventListener('click', resetTimer);
+    </script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        #timer {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</body>
+</html>
